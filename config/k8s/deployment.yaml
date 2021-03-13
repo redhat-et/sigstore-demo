@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sigstore-demo-app
-  namespace: sigstore-demo-app
   labels:
     app: sigstore-demo-app
 spec:
