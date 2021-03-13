@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: sigstore-demo-app
+  namespace: sigstore-demo-app
+spec:
+  host: sigstore-demo-app.apps.sigstore-demo.bcallawa.dev # Modify to use your FQDN e.g. <app-name>.apps.<clustername>.<domain>.
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: sigstore-demo-app

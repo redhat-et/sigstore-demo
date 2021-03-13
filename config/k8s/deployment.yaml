@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sigstore-demo-app
+  namespace: sigstore-demo-app
+  labels:
+    app: sigstore-demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sigstore-demo-app
+  template:
+    metadata:
+      labels:
+        app: sigstore-demo-app
+    spec:
+      containers:
+        - name: sigstore-demo-app
+          image: quay.io/ifont/sigstore-demo-app:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
