@@ -1,0 +1,12 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: sigstore-demo-app-trigger
+spec:
+  serviceAccountName: pipeline
+  bindings:
+    - ref: sigstore-demo-app
+  template:
+    # In newer trigger versions the 'name' field will be deprecated and is
+    # replaced by 'ref' field.
+    name: sigstore-demo-app

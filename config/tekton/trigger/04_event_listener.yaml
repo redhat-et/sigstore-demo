@@ -1,0 +1,8 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: sigstore-demo-app
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - triggerRef: sigstore-demo-app-trigger
