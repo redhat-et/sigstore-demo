@@ -23,13 +23,13 @@ spec:
         name: build-and-deploy
       params:
       - name: deployment-name
-        value: $(tt.params.git-repo-name)
+        value: $(tt.params.git-repo-name)-app
       - name: git-url
         value: $(tt.params.git-repo-url)
       - name: git-revision
         value: $(tt.params.git-revision)
       - name: IMAGE
-        value: image-registry.openshift-image-registry.svc:5000/sigstore-demo/$(tt.params.git-repo-name)
+        value: image-registry.openshift-image-registry.svc:5000/sigstore-demo/$(tt.params.git-repo-name)-app
       workspaces:
       - name: shared-workspace
         volumeClaimTemplate:
