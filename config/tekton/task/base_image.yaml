@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: base-image
+spec:
+  description: >-
+    This task extracts the base image from a given container image by examining
+    the container image labels.
+
+  workspaces:
+  - name: source
+  params:
+  - name: tlsverify
+    type: string
+    default: "true"
+  - name: image
+    type: string
+  - name: base-image-label
+    type: string
+  results:
+    - name: base-image
+      description: The base image extracted from the label of the container image passed in
+  steps:
+  - name: inspect-image
+    workingDir: $(workspaces.source.path)
+    image: quay.io/skopeo/stable
+    script: |
+      #!/usr/bin/env bash
+      skopeo inspect --tls-verify=$(params.tlsverify) docker://$(params.image) > inspect.json
+  - name: extract-base-image
+    workingDir: $(workspaces.source.path)
+    image: docker.io/stedolan/jq:latest
+    script: |
+      #!/usr/bin/env bash
+      cat inspect.json | jq -r '.Labels["base.image"]' > $(results.base-image.path)
+      echo -n "IMAGE=$(params.image) was built using BASE_IMAGE="
+      cat $(results.base-image.path)
