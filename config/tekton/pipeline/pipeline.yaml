@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-and-deploy
+  name: build-verify-deploy
 spec:
   workspaces:
   - name: shared-workspace
@@ -18,7 +18,7 @@ spec:
     default: "main"
   - name: IMAGE
     type: string
-    description: image to be build from the code
+    description: image to be built from the code
   tasks:
   - name: fetch-repository
     taskRef:
@@ -50,6 +50,34 @@ spec:
       workspace: shared-workspace
     runAfter:
     - fetch-repository
+  - name: get-base-image
+    taskRef:
+      name: base-image
+    params:
+    - name: tlsverify
+      value: "false"
+    - name: image
+      value: $(params.IMAGE)
+    - name: base-image-label
+      value: "base.image"
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    runAfter:
+    - build-image
+  - name: verify-base-image
+    taskRef:
+      name: cosign
+    params:
+    - name: command
+      value: "verify"
+    - name: image
+      value: $(tasks.get-base-image.results.base-image)
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    runAfter:
+    - get-base-image
   - name: apply-manifests
     taskRef:
       name: apply-manifests
@@ -57,7 +85,7 @@ spec:
     - name: source
       workspace: shared-workspace
     runAfter:
-    - build-image
+    - verify-base-image
   - name: update-deployment
     taskRef:
       name: update-deployment
