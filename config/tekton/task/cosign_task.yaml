@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cosign
+  labels:
+    app.kubernetes.io/version: "0.1.0"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+spec:
+  description: >-
+    These tasks make it possible to use cosign within your Tekton pipelines
+
+    cosign is a tool for signing and verifying software artifacts.
+
+  workspaces:
+  - name: source
+  params:
+  - name: command
+    type: string
+  - name: image
+    type: string
+  results:
+    - name: email
+      description: The email from the certificate common name in JSON format
+  steps:
+  - name: cosign
+    workingDir: $(workspaces.source.path)
+    image: gcr.io/projectsigstore/cosign/ci/cosign@sha256:663d8b99080238a14f8fd43ce6f870d57f7193bdadef18ee9fa30c56e228523c
+    env:
+      - name: COSIGN_EXPERIMENTAL
+        value: "1"
+    script: |
+      #!/busybox/env /busybox/sh
+      CMD="cosign $(params.command) $(params.image)"
+      echo "${CMD}"
+      ${CMD} &> result
+      cat result
+  - name: get-email
+    workingDir: $(workspaces.source.path)
+    image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+    script: |
+      #!/usr/bin/env bash
+      CERT_CN=$(awk -F"  " '/^Certificate common name/ {print $2}' result)
+      echo "{ \"certificate-common-name\": \"${CERT_CN}\" }" > $(results.email.path)
+      cat $(results.email.path)
