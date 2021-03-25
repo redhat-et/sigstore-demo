@@ -2,7 +2,13 @@
 
 ## Setup
 
-### Create Tekton Tasks and Pipeline
+### Create Tekton Tasks
+
+```shell
+oc apply -f ./config/tekton/task
+```
+
+### Create Tekton Pipeline
 
 ```shell
 oc apply -f ./config/tekton/pipeline
