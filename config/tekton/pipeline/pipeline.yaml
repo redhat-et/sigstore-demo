@@ -82,6 +82,26 @@ spec:
     runAfter:
     - get-base-image
 
+  - name: apply-opa-maintainers-policy
+    taskRef:
+      name: conftest
+    params:
+    - name: files
+      value: certificate-common-name.json # This file is created in ./ by verify-base-image task
+    - name: policy
+      value: "config/opa/maintainers.rego"
+    - name: args
+      value:
+        - --data
+        - MAINTAINERS.json
+        - --parser
+        - json
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    runAfter:
+    - verify-base-image
+
   - name: apply-manifests
     taskRef:
       name: apply-manifests
@@ -89,7 +109,7 @@ spec:
     - name: source
       workspace: shared-workspace
     runAfter:
-    - verify-base-image
+    - apply-opa-maintainers-policy
 
   - name: update-deployment
     taskRef:
