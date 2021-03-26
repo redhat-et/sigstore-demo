@@ -31,15 +31,19 @@ spec:
         value: "1"
     script: |
       #!/busybox/env /busybox/sh
+      set -o errexit
       CMD="cosign $(params.command) $(params.image)"
       echo "${CMD}"
-      ${CMD} &> result
+      ERR_MSG="Failed to $(params.command) $(params.image)"
+      ${CMD} &> result || (echo "${ERR_MSG}" && exit 1)
       cat result
   - name: get-email
     workingDir: $(workspaces.source.path)
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
     script: |
       #!/usr/bin/env bash
-      CERT_CN=$(awk -F"  " '/^Certificate common name/ {print $2}' result)
+      set -o errexit
+      CERT_CN=$(awk -F "  " '/^Certificate common name/ {print $2}' result)
       echo "{ \"certificate-common-name\": \"${CERT_CN}\" }" > $(results.email.path)
       cat $(results.email.path)
+      cat $(results.email.path) > ./certificate-common-name.json
