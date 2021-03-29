@@ -4,8 +4,9 @@
 tkn pipelinerun delete --all -f
 tkn taskrun delete --all -f
 
-# Removes all images for the base image
-for i in $(gcloud container images list-tags gcr.io/ifontlabs/ubi8-minimal --filter='tags:*'  --format="get(digest)" --limit=100); do
+# Removes all tagged and untagged images for the base image
+gcloud container images delete --force-delete-tags --quiet gcr.io/ifontlabs/ubi8-minimal
+for i in $(gcloud container images list-tags gcr.io/ifontlabs/ubi8-minimal --filter='-tags:*'  --format="get(digest)" --limit=100); do
   gcloud container images delete --force-delete-tags --quiet gcr.io/ifontlabs/ubi8-minimal@${i}
 done
 
