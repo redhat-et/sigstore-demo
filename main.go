@@ -7,7 +7,7 @@ import (
 )
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "Hello SigStore World!\n")
+	io.WriteString(w, "Hello Dry Run World!\n")
 }
 
 func main() {
