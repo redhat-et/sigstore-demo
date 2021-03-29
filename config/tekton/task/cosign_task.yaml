@@ -35,8 +35,12 @@ spec:
       CMD="cosign $(params.command) $(params.image)"
       echo "${CMD}"
       ERR_MSG="Failed to $(params.command) $(params.image)"
-      ${CMD} &> result || (echo "${ERR_MSG}" && exit 1)
+      ${CMD} &> result || err=$?
       cat result
+      if [[ ${err} -ne 0 ]]; then
+        echo "${ERR_MSG}"
+        exit 1
+      fi
   - name: get-email
     workingDir: $(workspaces.source.path)
     image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
