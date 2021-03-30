@@ -25,7 +25,7 @@ spec:
   steps:
   - name: cosign
     workingDir: $(workspaces.source.path)
-    image: gcr.io/projectsigstore/cosign/ci/cosign@sha256:663d8b99080238a14f8fd43ce6f870d57f7193bdadef18ee9fa30c56e228523c
+    image: gcr.io/projectsigstore/cosign/ci/cosign:v0.2.0
     env:
       - name: COSIGN_EXPERIMENTAL
         value: "1"
