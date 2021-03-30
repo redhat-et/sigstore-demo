@@ -31,11 +31,11 @@ spec:
         value: "1"
     script: |
       #!/busybox/env /busybox/sh
-      set -o errexit
       CMD="cosign $(params.command) $(params.image)"
       echo "${CMD}"
       ERR_MSG="Failed to $(params.command) $(params.image)"
-      ${CMD} &> result || err=$?
+      ${CMD} &> result
+      err=$?
       cat result
       if [[ ${err} -ne 0 ]]; then
         echo "${ERR_MSG}"
