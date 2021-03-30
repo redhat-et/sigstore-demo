@@ -13,6 +13,9 @@ google-chrome https://sigstore-demo-app.apps.sigstore-demo.bcallawa.dev/
 # contents of repo
 ls -tr
 
+# list of maintainers
+vi MAINTAINERS.json
+
 ## Dockerfile for running app
 vi Dockerfile
 
@@ -40,7 +43,9 @@ git push
 # sign existing container image
 cosign sign gcr.io/ifontlabs/ubi8-minimal:stable
 
-# re-run pipeline and show deployed app changes
+# re-run pipeline and deploy app changes
+
+## STOLEN CREDENTIALS
 
 # Dockerfile for malicious image
 cat config/image/base/exploit/Dockerfile
@@ -62,8 +67,5 @@ git commit -a -m "Update Hello World message again"
 
 # push change
 git push
-
-# list of maintainers
-vi MAINTAINERS.json
 
 
