@@ -7,7 +7,7 @@
 #doitlive env: COSIGN_EXPERIMENTAL=1
 #doitlive commentecho: true
 
-## DEMO RUNNING APP
+## DEMO THE RUNNING APP
 google-chrome https://sigstore-demo-app.apps.sigstore-demo.bcallawa.dev/
 
 # contents of repo
