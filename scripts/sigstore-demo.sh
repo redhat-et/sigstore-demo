@@ -68,4 +68,5 @@ git commit -a -m "Update Hello World message again"
 # push change
 git push
 
-
+# list of maintainers
+vi MAINTAINERS.json
