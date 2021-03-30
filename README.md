@@ -1,5 +1,9 @@
 # sigstore-demo
 
+This contains the content used to demo sigstore at the OpenShift Commons Briefing on March 30, 2021; a recording of this can be found at [https://www.youtube.com/watch?v=yKrbUGSwrEw](https://www.youtube.com/watch?v=yKrbUGSwrEw).
+
+Slides from the presentation can be seen at: [https://speakerdeck.com/redhatopenshift/secure-your-open-source-supply-chain-with-sigstore](https://speakerdeck.com/redhatopenshift/secure-your-open-source-supply-chain-with-sigstore).
+
 ## Setup
 
 ### Create Tekton Tasks
